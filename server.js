@@ -1,4 +1,5 @@
 const express = require('express');
+const cors = require('cors');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
@@ -6,7 +7,7 @@ const jwt = require('jsonwebtoken');
 const app = express();
 const sub = express();
 app.use(express.json());
-
+app.use(cors());
 
 // Connect to MongoDB
 mongoose.connect('mongodb+srv://nehapn21it:neha250103@cluster0.owt0jmk.mongodb.net/?retryWrites=true&w=majority', {
