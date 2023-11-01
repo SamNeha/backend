@@ -1,6 +1,3 @@
-
-
-
 const express = require('express');
 const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
@@ -12,7 +9,7 @@ app.use(express.json());
 
 
 // Connect to MongoDB
-mongoose.connect('mongodb://127.0.0.1:27017/signup', {
+mongoose.connect('mongodb+srv://nehapn21it:neha250103@cluster0.owt0jmk.mongodb.net/?retryWrites=true&w=majority', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 });
