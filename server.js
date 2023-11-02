@@ -1,6 +1,7 @@
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
+const multer = require('multer');
 const bodyParser = require('body-parser');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
@@ -87,6 +88,8 @@ mongoose.connect('mongodb+srv://nehapn21it:neha250103@cluster0.owt0jmk.mongodb.n
   });
 
 
+  const storage = multer.memoryStorage(); // Store the file in memory
+  const upload = multer({ storage: storage });
 
   const App = mongoose.model('App', {
     patientName:String,
@@ -95,7 +98,7 @@ mongoose.connect('mongodb+srv://nehapn21it:neha250103@cluster0.owt0jmk.mongodb.n
            appointmentTime:String,
            
   });  
-  app.post('/app', async (req, res) => {
+  app.post('/app', upload.single('file'), async (req, res) => {
     const {
       patientName,
            patientNumber,
@@ -105,14 +108,19 @@ mongoose.connect('mongodb+srv://nehapn21it:neha250103@cluster0.owt0jmk.mongodb.n
     } = req.body;
 
     try {
-      if ( !patientName || !patientNumber || !patientGender || !appointmentTime  ) {
+      if ( !patientName || !patientNumber || !patientGender || !appointmentTime || !req.file ) {
         return res.status(400).json({ message: 'Please fill in all fields' });
       }
+      const fileData = req.file.buffer; // Get the file data from the request
+    const fileContentType = req.file.mimetype;
+
       const newApp = new App({
         patientName,
            patientNumber,
            patientGender,
            appointmentTime,
+           fileData, // Store the file data in the database
+           fileContentType,
           
       });
       await newApp.save();
